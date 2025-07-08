@@ -4,9 +4,9 @@ namespace ContactList.Repositories.Entities
 {
     public class Contact
     {
+        public int Id { get; set; }
 
         [Required]
-        [Key]
         [MaxLength(50)]
         public string Email { get; set; }
 
