@@ -18,11 +18,6 @@ namespace ContactList.Functions.Query.Get
         {
             var contact = await _context.Contact.FindAsync(request.Id);
 
-            if (contact is null)
-            {
-                throw new Exception("Not found any contact with given id!");
-            }
-
             return contact;
         }
     }

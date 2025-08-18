@@ -3,8 +3,7 @@ using MediatR;
 
 namespace ContactList.Functions.Query.Get
 {
-    public class GetContactQuery : IRequest<List<Contact>>
+    public class GetAllContactQuery : IRequest<List<Contact>>
     {
-        public Guid? Id { get; set; }
     }
 }

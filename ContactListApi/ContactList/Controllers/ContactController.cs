@@ -1,10 +1,9 @@
-﻿using ContactList.Functions.Query.GetContactList;
-using ContactList.Models;
+﻿using ContactList.Models;
 using ContactList.Models.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Controllers
 {
@@ -32,29 +31,39 @@ namespace ContactList.Controllers
             var request = new GetContactQuery();
             var result = await _mediator.Send(request);
 
-            return result;
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetContact(Guid id)
+        public async Task<ActionResult<Contact>> GetContact(Guid id)
         {
-            var request = new GetContactQuery()
+            var request = new GetContactQuery() { Id = id};
+
+            try
             {
-                Id = id
-            };
+                var result =  await _mediator.Send(request);
+                if(result is null)
+                {
+                    return NotFound();
+                }
 
-            var result = await _mediator.Send(request);
-
-            return result;
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return new NotFoundObjectResult("Contact with given id not found!");
+            }
         }
 
 
         #endregion
 
         // POST api/values
+
         [HttpPost]
+        [Authorize]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,6 +80,7 @@ namespace ContactList.Controllers
 
         // PUT api/values/5
         [HttpPut("{index}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -81,6 +91,7 @@ namespace ContactList.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{index}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
