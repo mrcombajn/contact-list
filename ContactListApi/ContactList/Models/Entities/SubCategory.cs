@@ -1,6 +1,6 @@
-﻿namespace ContactList.Repositories.Entities
+﻿namespace ContactList.Models.Entities
 {
-    public class Category
+    public class SubCategory
     {
         public int Id { get; set; }
 

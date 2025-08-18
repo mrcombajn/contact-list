@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: db
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - backend
+
+  webapp:
+    build:
+      context: ./PgrOrdersApi/
+      dockerfile: Dockerfile.yml
+    ports:
+      - "8000:8080"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ConnectionStrings__DefaultConnection: "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USERNAME};Password=${DB_PASSWORD}"
+    networks:
+      - backend
+    depends_on:
+      db:
+        condition: service_healthy  
+
+networks:
+  backend:
+
+volumes:
+  db-data:
