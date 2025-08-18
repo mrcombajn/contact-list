@@ -1,4 +1,4 @@
-﻿namespace ContactList.Repositories.Entities
+﻿namespace ContactList.Models.Entities
 {
     public class Category
     {

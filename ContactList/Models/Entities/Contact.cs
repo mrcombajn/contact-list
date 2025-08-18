@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ContactList.Repositories.Entities
+namespace ContactList.Models.Entities
 {
     public class Contact
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]

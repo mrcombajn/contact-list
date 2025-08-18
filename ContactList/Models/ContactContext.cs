@@ -1,7 +1,7 @@
-﻿using ContactList.Repositories.Entities;
+﻿using ContactList.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContactList.Repositories
+namespace ContactList.Models
 {
     public class ContactContext : DbContext
     {
@@ -10,9 +10,9 @@ namespace ContactList.Repositories
         {
         }
         
-        public DbSet<Contact> Contacts => Set<Contact>();
-        public DbSet<Category> Categories => Set<Category>();
-        public DbSet<SubCategory> SubCategories => Set<SubCategory>();
+        public DbSet<Contact> Contact => Set<Contact>();
+        public DbSet<Category> Category => Set<Category>();
+        public DbSet<SubCategory> SubCategory => Set<SubCategory>();
 
     }
 }

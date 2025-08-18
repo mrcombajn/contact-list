@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ContactList.Repositories.Entities;
+using ContactList.Models.Entities;
 
 namespace ContactList.Models.Dto
 {

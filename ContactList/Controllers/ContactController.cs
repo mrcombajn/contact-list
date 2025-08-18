@@ -1,5 +1,5 @@
-﻿using ContactList.Repositories;
-using ContactList.Repositories.Entities;
+﻿using ContactList.Models;
+using ContactList.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +24,7 @@ namespace ContactList.Controllers
         public async Task<ActionResult<List<Contact>>> Get()
         {
             return _context
-                .Contacts
+                .Contact
                 .Include(contact => contact.Category)
                 .Include(contact => contact.SubCategory)
                 .ToList();
@@ -35,7 +35,7 @@ namespace ContactList.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetContact(int id)
         {
-            var contact = _context.Contacts.SingleOrDefault(contact => contact.Id == id);
+            var contact = _context.Contact.SingleOrDefault(contact => contact.Id == id);
             if (contact == null)
                 return NotFound();
 
@@ -52,7 +52,7 @@ namespace ContactList.Controllers
         {
             //jeśli mail sie powtarza to wyrzuć exception
 
-            _context.Contacts.Add(contact);
+            _context.Contact.Add(contact);
             await _context.SaveChangesAsync();
 
             return new CreatedAtActionResult(nameof(GetContact), "Contact", new { id = contact.Id }, contact);
