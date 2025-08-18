@@ -1,12 +1,11 @@
-﻿using ContactList.Models;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
 builder.Services.AddControllers();
