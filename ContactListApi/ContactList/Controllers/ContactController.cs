@@ -1,5 +1,7 @@
-﻿using ContactList.Models;
+﻿using ContactList.Functions.Query.GetContactList;
+using ContactList.Models;
 using ContactList.Models.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +15,24 @@ namespace ContactList.Controllers
     {
         private ContactContext _context;
 
-        public ContactController(ContactContext contactContext)
+        private IMediator _mediator;
+
+        public ContactController(IMediator mediator)
         {
-            this._context = contactContext;
+            this._mediator = mediator;
         }
 
-        // GET api/values
+
+        #region GET
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Contact>>> Get()
         {
-            return _context
-                .Contact
-                .Include(contact => contact.Category)
-                .Include(contact => contact.SubCategory)
-                .ToList();
+            var request = new GetAllContactQuery();
+            var result = await _mediator.Send(request);
+
+            return result;
         }
 
         [HttpGet("{id}")]
@@ -41,6 +46,9 @@ namespace ContactList.Controllers
 
             return Ok(contact);
         }
+
+
+        #endregion
 
         // POST api/values
         [HttpPost]

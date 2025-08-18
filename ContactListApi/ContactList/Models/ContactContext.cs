@@ -14,5 +14,12 @@ namespace ContactList.Models
         public DbSet<Category> Category => Set<Category>();
         public DbSet<SubCategory> SubCategory => Set<SubCategory>();
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Contact>()
+                .HasIndex(c => c.Email)
+                .IsUnique();
+        }
     }
 }
