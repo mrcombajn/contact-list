@@ -29,7 +29,7 @@ namespace ContactList.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Contact>>> Get()
         {
-            var request = new GetAllContactQuery();
+            var request = new GetContactQuery();
             var result = await _mediator.Send(request);
 
             return result;
@@ -38,13 +38,16 @@ namespace ContactList.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetContact(int id)
+        public IActionResult GetContact(Guid id)
         {
-            var contact = _context.Contact.SingleOrDefault(contact => contact.Id == id);
-            if (contact == null)
-                return NotFound();
+            var request = new GetContactQuery()
+            {
+                Id = id
+            };
 
-            return Ok(contact);
+            var result = await _mediator.Send(request);
+
+            return result;
         }
 
 

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ContactList.Models;
+﻿using ContactList.Models;
 using ContactList.Models.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContactList.Functions.Query.GetContactList
+namespace ContactList.Functions.Query.Get
 {
-    public class GetAllContactQueryHandler : IRequestHandler<GetAllContactQuery, List<Contact>>
+    public class GetAllContactQueryHandler : IRequestHandler<GetContactQuery, List<Contact>>
     {
 
         private readonly ContactContext _context;
@@ -20,7 +15,7 @@ namespace ContactList.Functions.Query.GetContactList
             this._context = context;
         }
 
-        public Task<List<Contact>> Handle(GetAllContactQuery request, CancellationToken cancellationToken)
+        public Task<List<Contact>> Handle(GetContactQuery request, CancellationToken cancellationToken)
         {
             return _context.Contact.ToListAsync();
         }
