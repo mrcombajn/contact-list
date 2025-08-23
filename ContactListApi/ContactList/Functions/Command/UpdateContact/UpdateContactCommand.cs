@@ -1,33 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ContactList.Models.Entities;
+﻿using ContactList.Models.Entities;
+using MediatR;
 
-namespace ContactList.Models.Dto;
+namespace ContactList.Functions.Command.UpdateContact;
 
-public class ContactDto
+public sealed class UpdateContactCommand : IRequest
 {
-    [Required]
-    [MaxLength(50)]
+    public int Id { get; set; }
     public string Email { get; set; }
-
-    [Required]
-    [MaxLength(20)]
     public string Name { get; set; }
-
-    [Required]
-    [MaxLength(20)]
     public string Surname { get; set; }
-
-
-    [MaxLength(20)]
     public string Password { get; set; }
-
     public Category Category { get; set; }
-
-    [MaxLength(20)]
     public SubCategory SubCategory { get; set; }
-
-    [MaxLength(20)]
     public string PhoneNumebr { get; set; }
-
     public DateOnly BirthdayDate { get; set; }
 }

@@ -22,7 +22,7 @@ services:
 
   webapp:
     build:
-      context: ./PgrOrdersApi/
+      context: ./ContactList/
       dockerfile: Dockerfile.yml
     ports:
       - "8000:8080"

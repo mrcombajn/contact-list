@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using ContactList.Initialization;
+using ContactList.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +46,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext= scope.ServiceProvider.GetRequiredService<ContactContext>();
+    ContextInitialization.InitializeData(dbContext);
 }
 
 app.UseHttpsRedirection();
