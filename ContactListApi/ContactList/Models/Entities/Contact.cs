@@ -29,7 +29,7 @@ public class Contact
     public SubCategory SubCategory { get; set; }
 
     [MaxLength(20)]
-    public string PhoneNumebr { get; set; }
+    public string PhoneNumber { get; set; }
 
     public DateOnly BirthdayDate { get; set; }
 }

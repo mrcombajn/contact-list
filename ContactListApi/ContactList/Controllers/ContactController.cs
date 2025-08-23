@@ -1,4 +1,6 @@
-﻿using ContactList.Models;
+﻿using ContactList.Functions.Command.CreateContact;
+using ContactList.Models;
+using ContactList.Models.Dto;
 using ContactList.Models.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ContactList.Controllers;
 
 
-[Route("api/[controller]")]
+[Route("api/contact")]
 [ApiController]
 public class ContactController : ControllerBase
 {
@@ -16,9 +18,11 @@ public class ContactController : ControllerBase
 
     private IMediator _mediator;
 
-    public ContactController(IMediator mediator)
+    private ISender _sender;
+
+    public ContactController(ISender sender)
     {
-        this._mediator = mediator;
+        this._sender = sender;
     }
 
 
@@ -29,7 +33,7 @@ public class ContactController : ControllerBase
     public async Task<ActionResult<List<Contact>>> Get()
     {
         var request = new GetContactQuery();
-        var result = await _mediator.Send(request);
+        var result = await _sender.Send(request);
 
         return Ok(result);
     }
@@ -63,19 +67,27 @@ public class ContactController : ControllerBase
     // POST api/values
 
     [HttpPost]
-    [Authorize]
     [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Post([FromBody] Contact contact)
+    public async Task<IActionResult> Post([FromBody] ContactDto contact, CancellationToken cancellationToken)
     {
-        //jeśli mail sie powtarza to wyrzuć exception
+        var command = new CreateContactCommand()
+        {
+            Email = contact.Email,
+            Name = contact.Name,
+            Surname = contact.Surname,
+            Password = contact.Password,
+            Category = new Category() { Name = contact.Category.Name },
+            SubCategory = new SubCategory() { Name = contact.SubCategory.Name},
+            PhoneNumber = contact.PhoneNumber,
+            BirthdayDate = contact.BirthdayDate,
+        };
 
-        _context.Contact.Add(contact);
-        await _context.SaveChangesAsync();
+        var result =  await _sender.Send(command, cancellationToken);
 
-        return new CreatedAtActionResult(nameof(GetContact), "Contact", new { id = contact.Id }, contact);
+        return result.IsSuccess ? CreatedAtActionResult { } : BadRequest(result.Error);
     }
 
     // PUT api/values/5

@@ -1,6 +1,7 @@
 ﻿using ContactList.Abstractions.Messaging;
 using ContactList.Abstractions.Shared;
 using ContactList.Models;
+using ContactList.Models.Entities;
 
 namespace ContactList.Functions.Command.CreateContact;
 
@@ -13,8 +14,32 @@ public sealed class CreateContactCommandHandler : ICommandHandler<CreateContactC
         _context = context;
     }
 
-    public Task<Result> Handle(CreateContactCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateContactCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var contact = new Contact()
+        {
+            Email = request.Email,
+            Name = request.Name,
+            Surname = request.Surname,
+            Password = request.Password,
+            Category = request.Category,
+            SubCategory = request.SubCategory,
+            PhoneNumber = request.PhoneNumber,
+            BirthdayDate = request.BirthdayDate,
+        };
+
+        try
+        {
+            _context.Contact.Add(contact);
+
+            _context.SaveChangesAsync();
+
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+
+            return Result.Failure(Error.NullValue);
+        }
     }
 }
