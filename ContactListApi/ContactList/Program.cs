@@ -14,6 +14,9 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 var key = Encoding.ASCII.GetBytes("key_placeholder");
 
+builder.Services.AddDbContext<ContactContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddScoped<ContactContext>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
