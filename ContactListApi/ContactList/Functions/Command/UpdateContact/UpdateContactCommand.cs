@@ -1,9 +1,9 @@
-﻿using ContactList.Models.Entities;
-using MediatR;
+﻿using ContactList.Abstractions.Messaging;
+using ContactList.Models.Entities;
 
 namespace ContactList.Functions.Command.UpdateContact;
 
-public sealed class UpdateContactCommand : IRequest
+public sealed class UpdateContactCommand : ICommand
 {
     public int Id { get; set; }
     public string Email { get; set; }
@@ -12,6 +12,6 @@ public sealed class UpdateContactCommand : IRequest
     public string Password { get; set; }
     public Category Category { get; set; }
     public SubCategory SubCategory { get; set; }
-    public string PhoneNumebr { get; set; }
+    public string PhoneNumber { get; set; }
     public DateOnly BirthdayDate { get; set; }
 }

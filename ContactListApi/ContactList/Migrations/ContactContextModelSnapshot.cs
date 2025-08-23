@@ -108,6 +108,7 @@ namespace ContactList.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SubCategory");
+
                 });
 
             modelBuilder.Entity("ContactList.Models.Entities.Contact", b =>

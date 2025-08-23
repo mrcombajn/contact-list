@@ -1,4 +1,7 @@
 ﻿using ContactList.Functions.Command.CreateContact;
+using ContactList.Functions.Command.DeleteContact;
+using ContactList.Functions.Command.UpdateContact;
+using ContactList.Functions.Query.GetAllContact;
 using ContactList.Models;
 using ContactList.Models.Dto;
 using ContactList.Models.Entities;
@@ -9,14 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContactList.Controllers;
 
-
 [Route("api/contact")]
 [ApiController]
 public class ContactController : ControllerBase
 {
     private ContactContext _context;
-
-    private IMediator _mediator;
 
     private ISender _sender;
 
@@ -32,7 +32,7 @@ public class ContactController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Contact>>> Get()
     {
-        var request = new GetContactQuery();
+        var request = new GetAllContactQuery();
         var result = await _sender.Send(request);
 
         return Ok(result);
@@ -47,18 +47,19 @@ public class ContactController : ControllerBase
 
         try
         {
-            var result =  await _mediator.Send(request);
+/*            var result =  await _mediator.Send(request);
             if(result is null)
             {
                 return NotFound();
             }
 
-            return Ok(result);
+            return Ok(result);*/
         }
         catch (Exception ex)
         {
             return new NotFoundObjectResult("Contact with given id not found!");
         }
+        return null;
     }
 
 
@@ -87,7 +88,7 @@ public class ContactController : ControllerBase
 
         var result =  await _sender.Send(command, cancellationToken);
 
-        return result.IsSuccess ? CreatedAtActionResult { } : BadRequest(result.Error);
+        return result.IsSuccess ? Created() : BadRequest(result.Error);
     }
 
     // PUT api/values/5
@@ -96,9 +97,24 @@ public class ContactController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<Contact>> Put(int id, [FromBody] Contact item)
+    public async Task<ActionResult<Contact>> Put(int id, [FromBody] ContactDto contact, CancellationToken cancellationToken)
     {
-        return null;
+        var command = new UpdateContactCommand()
+        {
+            Id = id,
+            Email = contact.Email,
+            Name = contact.Name,
+            Surname = contact.Surname,
+            Password = contact.Password,
+            Category = new Category() { Name = contact.Category.Name },
+            SubCategory = new SubCategory() { Name = contact.SubCategory.Name },
+            PhoneNumber = contact.PhoneNumber,
+            BirthdayDate = contact.BirthdayDate,
+        };
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
 
     // DELETE api/values/5
@@ -107,9 +123,16 @@ public class ContactController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Delete(int index)
+    public async Task<IActionResult> Delete(int index, CancellationToken cancellationToken)
     {
-        return null;
+        var command = new DeleteContactCommand
+        {
+            Id = index,
+        };
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
 
 }
