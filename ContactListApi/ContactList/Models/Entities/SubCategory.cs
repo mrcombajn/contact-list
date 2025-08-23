@@ -1,10 +1,9 @@
-﻿namespace ContactList.Models.Entities
+﻿namespace ContactList.Models.Entities;
+
+public class SubCategory
 {
-    public class SubCategory
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-    }
 }

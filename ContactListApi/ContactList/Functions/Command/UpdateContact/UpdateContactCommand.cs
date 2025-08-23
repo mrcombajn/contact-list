@@ -1,35 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ContactList.Abstractions.Messaging;
+using ContactList.Models.Entities;
 
-namespace ContactList.Models.Entities;
+namespace ContactList.Functions.Command.UpdateContact;
 
-public class Contact
+public sealed class UpdateContactCommand : ICommand
 {
-    [Key]
     public int Id { get; set; }
-
-    [Required]
-    [MaxLength(50)]
     public string Email { get; set; }
-
-    [Required]
-    [MaxLength(20)]
     public string Name { get; set; }
-
-    [Required]
-    [MaxLength(20)]
     public string Surname { get; set; }
-
-
-    [MaxLength(20)]
     public string Password { get; set; }
-
     public Category Category { get; set; }
-
-    [MaxLength(20)]
     public SubCategory SubCategory { get; set; }
-
-    [MaxLength(20)]
     public string PhoneNumber { get; set; }
-
     public DateOnly BirthdayDate { get; set; }
 }
