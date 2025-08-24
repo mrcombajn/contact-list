@@ -13,6 +13,7 @@ public class ContactContext : DbContext
     public DbSet<Contact> Contact => Set<Contact>();
     public DbSet<Category> Category => Set<Category>();
     public DbSet<SubCategory> SubCategory => Set<SubCategory>();
+    public DbSet<Users> Users => Set<Users>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
