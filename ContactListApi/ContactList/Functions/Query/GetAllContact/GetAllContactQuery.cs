@@ -3,6 +3,6 @@ using MediatR;
 
 namespace ContactList.Functions.Query.GetAllContact;
 
-public sealed class GetAllContactQuery : IRequest<List<Contact>>
+public sealed class GetAllContactQuery : IRequest<IEnumerable<Contact>>
 {
 }

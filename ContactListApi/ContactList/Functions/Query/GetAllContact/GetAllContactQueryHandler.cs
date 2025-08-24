@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Functions.Query.GetAllContact;
 
-public sealed class GetAllContactQueryHandler : IRequestHandler<GetAllContactQuery, List<Contact>>
+public sealed class GetAllContactQueryHandler : IRequestHandler<GetAllContactQuery, IEnumerable<Contact>>
 {
 
     private readonly ContactContext _context;
@@ -15,8 +15,11 @@ public sealed class GetAllContactQueryHandler : IRequestHandler<GetAllContactQue
         this._context = context;
     }
 
-    public async Task<List<Contact>> Handle(GetAllContactQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Contact>> Handle(GetAllContactQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Contact.ToListAsync();
+        return await _context
+            .Contact
+            .Include(e => e.Category)
+            .Include(e => e.SubCategory).ToListAsync();
     }
 }

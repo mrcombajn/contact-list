@@ -3,5 +3,5 @@ using MediatR;
 
 public sealed class GetContactQuery : IRequest<Contact>
 {
-    public Guid? Id { get; set; }
+    public int Id { get; set; }
 }
