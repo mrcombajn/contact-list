@@ -25,4 +25,14 @@ public static class ContextInitialization
 
         context.SaveChanges();
     }
+
+    public static void InitializeUsers(UsersContext context)
+    {
+        context.Database.Migrate();
+
+        if (!context.Users.Any())
+        {
+            context.Users.Add(new() { Username = "admin", Password = "admin" });
+        }
+    }
 }

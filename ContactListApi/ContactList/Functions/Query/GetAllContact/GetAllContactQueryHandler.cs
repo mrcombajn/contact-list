@@ -29,7 +29,7 @@ public sealed class GetAllContactQueryHandler : IRequestHandler<GetAllContactQue
             Name = c.Name,
             Surname = c.Surname,
             Email = c.Email,
-            Category = c.Category.Id,
+            Category = new CategoryDto() { Id = c.Category.Id, Name = c.Category.Name },
             SubCategory = new SubCategoryDto() { Id = c.SubCategory.Id, Name = c.SubCategory.Name },
             PhoneNumber = c.PhoneNumber,
             BirthdayDate = c.BirthdayDate,

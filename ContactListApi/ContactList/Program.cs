@@ -12,10 +12,13 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-var key = Encoding.ASCII.GetBytes("key_placeholder");
+var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("JWT_SECRET"));
 
 builder.Services.AddDbContext<ContactContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddScoped<ContactContext>();
+
+builder.Services.AddDbContext<UsersContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddScoped<UsersContext>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
