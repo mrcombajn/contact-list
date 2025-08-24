@@ -23,14 +23,11 @@ public static class ContextInitialization
             context.SubCategory.Add(new() { Name = "klient" });
         }
 
-        context.SaveChanges();
-    }
-
-    public static void InitializeUsers(ContactContext context)
-    {
         if (!context.Users.Any())
         {
             context.Users.Add(new() { Username = "admin", Password = "admin" });
         }
+
+        context.SaveChanges();
     }
 }

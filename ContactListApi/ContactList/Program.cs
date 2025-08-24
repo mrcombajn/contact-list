@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET"));
+var key = Encoding.ASCII.GetBytes("key_placeholder");
 
 builder.Services.AddDbContext<ContactContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddScoped<ContactContext>();
@@ -56,7 +56,6 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext= scope.ServiceProvider.GetRequiredService<ContactContext>();
     ContextInitialization.InitializeData(dbContext);
-    ContextInitialization.InitializeUsers(dbContext);
 }
 
 app.UseHttpsRedirection();

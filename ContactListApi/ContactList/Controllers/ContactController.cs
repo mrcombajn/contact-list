@@ -1,5 +1,4 @@
-﻿using ContactList.Abstractions.Shared;
-using ContactList.Functions.Command.CreateContact;
+﻿using ContactList.Functions.Command.CreateContact;
 using ContactList.Functions.Command.DeleteContact;
 using ContactList.Functions.Command.UpdateContact;
 using ContactList.Functions.Query.GetAllContact;
@@ -36,6 +35,31 @@ public class ContactController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<Contact>> GetContact(int id)
+    {
+        var request = new GetContactQuery() { Id = id };
+
+        try
+        {
+            /*            var result =  await _mediator.Send(request);
+                        if(result is null)
+                        {
+                            return NotFound();
+                        }
+
+                        return Ok(result);*/
+        }
+        catch
+        {
+            return new NotFoundObjectResult("Contact with given id not found!");
+        }
+        return null;
+    }
+
+
     #endregion
 
     // POST api/values
@@ -45,7 +69,7 @@ public class ContactController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<ContactDto>> Post([FromBody] ContactDto contact, CancellationToken cancellationToken)
+    public async Task<IActionResult> Post([FromBody] ContactDto contact, CancellationToken cancellationToken)
     {
         var command = new CreateContactCommand()
         {
@@ -59,9 +83,9 @@ public class ContactController : ControllerBase
             BirthdayDate = contact.BirthdayDate,
         };
 
-        Result<ContactDto> result = (Result<ContactDto>) await _sender.Send(command, cancellationToken);
-        
-        return result.IsSuccess ? CreatedAtAction(nameof(Post), result.Value) : BadRequest(result.Error);
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Created() : BadRequest(result.Error);
     }
 
     // PUT api/values/5
