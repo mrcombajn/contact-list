@@ -1,0 +1,15 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ContactList.Models.Entities;
+
+public class Users
+{
+    [Key]
+    public int Id { get; set; }
+
+    [Required]
+    public string Username;
+
+    [Required]
+    public string Password { get; set; }
+}

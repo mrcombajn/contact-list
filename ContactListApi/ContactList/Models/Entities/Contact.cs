@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ContactList.Models.Entities;
 
@@ -23,9 +24,10 @@ public class Contact
     [MaxLength(20)]
     public string Password { get; set; }
 
+    [AllowNull]
     public Category Category { get; set; }
 
-    [MaxLength(20)]
+    [AllowNull]
     public SubCategory SubCategory { get; set; }
 
     [MaxLength(20)]

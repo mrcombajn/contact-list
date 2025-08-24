@@ -2,7 +2,6 @@
 using ContactList.Functions.Command.DeleteContact;
 using ContactList.Functions.Command.UpdateContact;
 using ContactList.Functions.Query.GetAllContact;
-using ContactList.Models;
 using ContactList.Models.Dto;
 using ContactList.Models.Entities;
 using MediatR;
@@ -16,8 +15,6 @@ namespace ContactList.Controllers;
 [ApiController]
 public class ContactController : ControllerBase
 {
-    private ContactContext _context;
-
     private ISender _sender;
 
     public ContactController(ISender sender)
@@ -30,7 +27,7 @@ public class ContactController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Contact>>> Get()
+    public async Task<ActionResult<List<ContactDto>>> Get()
     {
         var request = new GetAllContactQuery();
         var result = await _sender.Send(request);
@@ -41,21 +38,21 @@ public class ContactController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Contact>> GetContact(Guid id)
+    public async Task<ActionResult<Contact>> GetContact(int id)
     {
-        var request = new GetContactQuery() { Id = id};
+        var request = new GetContactQuery() { Id = id };
 
         try
         {
-/*            var result =  await _mediator.Send(request);
-            if(result is null)
-            {
-                return NotFound();
-            }
+            /*            var result =  await _mediator.Send(request);
+                        if(result is null)
+                        {
+                            return NotFound();
+                        }
 
-            return Ok(result);*/
+                        return Ok(result);*/
         }
-        catch (Exception ex)
+        catch
         {
             return new NotFoundObjectResult("Contact with given id not found!");
         }
@@ -80,13 +77,13 @@ public class ContactController : ControllerBase
             Name = contact.Name,
             Surname = contact.Surname,
             Password = contact.Password,
-            Category = new Category() { Name = contact.Category.Name },
-            SubCategory = new SubCategory() { Name = contact.SubCategory.Name},
+            Category = contact.Category,
+            SubCategory = contact.SubCategory,
             PhoneNumber = contact.PhoneNumber,
             BirthdayDate = contact.BirthdayDate,
         };
 
-        var result =  await _sender.Send(command, cancellationToken);
+        var result = await _sender.Send(command, cancellationToken);
 
         return result.IsSuccess ? Created() : BadRequest(result.Error);
     }
@@ -99,6 +96,7 @@ public class ContactController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Contact>> Put(int id, [FromBody] ContactDto contact, CancellationToken cancellationToken)
     {
+
         var command = new UpdateContactCommand()
         {
             Id = id,
@@ -106,8 +104,8 @@ public class ContactController : ControllerBase
             Name = contact.Name,
             Surname = contact.Surname,
             Password = contact.Password,
-            Category = new Category() { Name = contact.Category.Name },
-            SubCategory = new SubCategory() { Name = contact.SubCategory.Name },
+            Category = contact.Category,
+            SubCategory = contact.SubCategory,
             PhoneNumber = contact.PhoneNumber,
             BirthdayDate = contact.BirthdayDate,
         };

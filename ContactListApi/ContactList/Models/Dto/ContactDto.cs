@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ContactList.Models.Entities;
-
-namespace ContactList.Models.Dto;
+﻿namespace ContactList.Models.Dto;
 
 public class ContactDto
 {
+    public int? Id { get; set; }
     public string Email { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }

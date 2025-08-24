@@ -25,8 +25,8 @@ public sealed class UpdateContactCommandHandler : ICommandHandler<UpdateContactC
         contact.Name = request.Name;
         contact.Surname = request.Surname;
         contact.Password = request.Password;
-        contact.Category = request.Category;
-        contact.SubCategory = request.SubCategory;
+        contact.Category = _context.Category.Find(request.Category);
+        contact.SubCategory = _context.SubCategory.Find(request.SubCategory);
         contact.PhoneNumber = request.PhoneNumber;
         contact.BirthdayDate = request.BirthdayDate;
 

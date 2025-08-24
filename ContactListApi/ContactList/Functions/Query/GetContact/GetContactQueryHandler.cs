@@ -1,10 +1,11 @@
 ﻿using ContactList.Models;
-using ContactList.Models.Entities;
+using ContactList.Models.Dto;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Functions.Query.GetContact;
 
-public sealed class GetContactQueryHandler : IRequestHandler<GetContactQuery, Contact>
+public sealed class GetContactQueryHandler : IRequestHandler<GetContactQuery, ContactDto>
 {
 
     private readonly ContactContext _context;
@@ -14,10 +15,24 @@ public sealed class GetContactQueryHandler : IRequestHandler<GetContactQuery, Co
         _context = context;
     }
 
-    public async Task<Contact> Handle(GetContactQuery request, CancellationToken cancellationToken)
+    public async Task<ContactDto> Handle(GetContactQuery request, CancellationToken cancellationToken)
     {
-        var contact = await _context.Contact.FindAsync(request.Id);
+        var contact = await _context
+            .Contact
+            .Include(e => e.Category)
+            .Include(e => e.SubCategory)
+            .FirstAsync(e => e.Id == request.Id, cancellationToken);
 
-        return contact;
+        return new ContactDto()
+        {
+            Id = contact.Id,
+            Name = contact.Name,
+            Surname = contact.Surname,
+            Email = contact.Email,
+            Category = new CategoryDto { Id = contact.Category.Id, Name = contact.Category.Name },
+            SubCategory = new SubCategoryDto() { Id = contact.SubCategory.Id, Name = contact.SubCategory.Name },
+            PhoneNumber = contact.PhoneNumber,
+            BirthdayDate = contact.BirthdayDate,
+        };
     }
 }

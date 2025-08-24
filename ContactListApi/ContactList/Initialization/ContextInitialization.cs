@@ -10,12 +10,23 @@ public static class ContextInitialization
     {
         context.Database.Migrate();
 
-        context.Category.Add(new() { Name = "służbowy" });
-        context.Category.Add(new() { Name = "prywatny" });
-        context.Category.Add(new() { Name = "inny" });
+        if (!context.Category.Any())
+        {
+            context.Category.Add(new() { Name = "służbowy" });
+            context.Category.Add(new() { Name = "prywatny" });
+            context.Category.Add(new() { Name = "inny" });
+        }
 
-        context.SubCategory.Add(new() { Name = "szef" });
-        context.SubCategory.Add(new() { Name = "klient" });
+        if (!context.SubCategory.Any())
+        {
+            context.SubCategory.Add(new() { Name = "szef" });
+            context.SubCategory.Add(new() { Name = "klient" });
+        }
+
+        if (!context.Users.Any())
+        {
+            context.Users.Add(new() { Username = "admin", Password = "admin" });
+        }
 
         context.SaveChanges();
     }
