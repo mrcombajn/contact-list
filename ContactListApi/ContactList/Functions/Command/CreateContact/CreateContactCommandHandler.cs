@@ -16,7 +16,7 @@ public sealed class CreateContactCommandHandler : ICommandHandler<CreateContactC
 
     public async Task<Result> Handle(CreateContactCommand request, CancellationToken cancellationToken)
     {
-        var category = _context.Category.Find(request.Category);
+        var category = _context.Category.Find(request.Category.Id);
 
         if (category is null)
             return Result.Failure(Error.NullValue);

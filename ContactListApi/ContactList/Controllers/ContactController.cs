@@ -27,7 +27,7 @@ public class ContactController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Contact>>> Get()
+    public async Task<ActionResult<List<ContactDto>>> Get()
     {
         var request = new GetAllContactQuery();
         var result = await _sender.Send(request);
