@@ -1,6 +1,7 @@
 ﻿using ContactList.Abstractions.Shared;
 using ContactList.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Functions.Query.GetUser;
 
@@ -14,7 +15,9 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Result>
 
     public async Task<Result> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Username.Equals(request.Login) && u.Password.Equals(request.Password));
+        var users = await _context.Users.ToListAsync();
+
+        var user = users.Where(u => u.Username.Equals(request.Login) && u.Password.Equals(request.Password));
 
         if (user == null)
             return Result.Failure(Error.NullValue);
