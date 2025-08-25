@@ -1,16 +1,13 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
   <ContactList/>
 </template>
 
 <script>
-import ContactList from './components/ContactList.vue';
-import HelloWorld from './components/HelloWorld.vue'
+import ContactList from './components/ContactList.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     ContactList
   }
 }
