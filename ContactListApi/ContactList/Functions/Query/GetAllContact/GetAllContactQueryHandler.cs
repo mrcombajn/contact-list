@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Functions.Query.GetAllContact;
 
-public sealed class GetAllContactQueryHandler : IRequestHandler<GetAllContactQuery, IEnumerable<ContactDto>>
+public sealed class GetAllContactQueryHandler : IRequestHandler<GetAllContactQuery, IEnumerable<DummyContactDto>>
 {
 
     private readonly ContactContext _context;
@@ -16,23 +16,19 @@ public sealed class GetAllContactQueryHandler : IRequestHandler<GetAllContactQue
         this._context = context;
     }
 
-    public async Task<IEnumerable<ContactDto>> Handle(GetAllContactQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<DummyContactDto>> Handle(GetAllContactQuery request, CancellationToken cancellationToken)
     {
         var contacts = await _context
             .Contact
             .Include(e => e.Category)
             .Include(e => e.SubCategory).ToListAsync();
 
-        return contacts.Select(c => new ContactDto()
+        return contacts.Select(c => new DummyContactDto()
         {
             Id = c.Id,
             Name = c.Name,
             Surname = c.Surname,
             Email = c.Email,
-            Category = new CategoryDto() { Id = c.Category.Id, Name = c.Category.Name },
-            SubCategory = new SubCategoryDto() { Id = c.SubCategory.Id, Name = c.SubCategory.Name },
-            PhoneNumber = c.PhoneNumber,
-            BirthdayDate = c.BirthdayDate,
         });
     }
 }

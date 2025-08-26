@@ -27,7 +27,7 @@ public class ContactController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ContactDto>>> Get()
+    public async Task<ActionResult<List<DummyContactDto>>> Get()
     {
         var request = new GetAllContactQuery();
         var result = await _sender.Send(request);
@@ -35,28 +35,27 @@ public class ContactController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Contact>> GetContact(int id)
+    public async Task<ActionResult<ContactDto>> GetContact(int id)
     {
         var request = new GetContactQuery() { Id = id };
 
         try
         {
-            /*            var result =  await _mediator.Send(request);
-                        if(result is null)
-                        {
-                            return NotFound();
-                        }
+            var result = await _sender.Send(request);
+            if (result is null)
+            {
+                return NotFound();
+            }
 
-                        return Ok(result);*/
+            return Ok(result);
         }
         catch
         {
             return new NotFoundObjectResult("Contact with given id not found!");
         }
-        return null;
     }
 
 
