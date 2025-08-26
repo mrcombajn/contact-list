@@ -1,6 +1,7 @@
 <template>
 
   <div>
+    <button v-if="userStore.isAuthenticated" @click="addContact">Dodaj nowy kontakt</button>
     <ContactListElement v-for="(contact, index) in contacts" :key="index"
       :id="contact.id"
       :email="contact.email"
@@ -13,12 +14,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-//import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/userStore'
 import axios from 'axios'
 import ContactListElement from '../components/ContactListElement.vue'
 
 const router = useRouter()
-//const userStore = useUserStore()
+const userStore = useUserStore()
 
 const contacts = ref([])
 
@@ -33,6 +34,10 @@ const fetchData = async () => {
 
 const showContact = (id) => {
   router.push({ name: 'Contact', params: { id } })
+}
+
+const addContact = () => {
+  router.push({ name: 'AddContact' })
 }
 
 onMounted(fetchData)

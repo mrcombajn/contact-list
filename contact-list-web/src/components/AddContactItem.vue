@@ -1,80 +1,61 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { reactive } from 'vue'
 import axios from 'axios'
 import { useUserStore } from '@/stores/userStore'
+import { useRouter } from 'vue-router'
 
-const route = useRoute()
-const router = useRouter()
 const userStore = useUserStore()
+const router = useRouter()
 
-const contact = ref(null)
-
-onMounted(async () => {
-  try {
-    const response = await axios.get(
-      `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`,
-      { headers: { Authorization: `Bearer ${userStore.token}` } }
-    )
-    console.log(response.data)
-    contact.value = response.data
-  } catch (err) {
-    console.error(err)
-  }
+const contact = reactive({
+  email: '',
+  name: '',
+  surname: '',
+  password: '',
+  phoneNumber: '',
+  category: { name: 'służbowy' },
+  subCategory: { name: '' },
+  birthdate: ''
 })
 
-const editContact = async () => {
-  try {
-    console.log(contact.value)
-    const response = await axios.put(
-      `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`,
-      contact.value,
-      { headers: { Authorization: `Bearer ${userStore.token}` }}
-    )
-    contact.value = response.data
-  } catch (err) {
-    console.error(err)
-  }
-}
+const addContact = async () => {
+    try {
+        await axios.post(
+        `${process.env.VUE_APP_API_URL}/api/contact`,
+        contact,
+        { headers: { Authorization: `Bearer ${userStore.token}` }}
+        )    
 
-const deleteContact = async () => {
-  try  {
-    await axios.delete(
-      `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`,
-      contact.value,
-      { headers: { Authorization: `Bearer ${userStore.token}` }}
-    )
-
-    router.push({name: "ContactList"})
-  } catch (err) {
-    console.error(err)
-  }
+        router.push({ name: 'ContactList' })
+    } catch(error) {
+        console.error(error)
+    }
 }
 
 </script>
 
 <template>
-  <div id="contact-container" v-if="contact">
+  <div id="contact-container">
     <ul class="contact-list">
       <li class="contact-item">
         <span class="label">Email:</span>
-        <span class="value"><input type="text" value="contact.email" v-model="contact.email"/></span>
+        <span class="value"><input type="text" v-model="contact.email"/></span>
       </li>
       <li class="contact-item">
         <span class="label">Imię:</span>
-        <span class="value"><input type="text" value="contact.name" v-model="contact.name"/></span>
+        <span class="value"><input type="text" v-model="contact.name"/></span>
       </li>
       <li class="contact-item">
         <span class="label">Nazwisko:</span>
-        <span class="value"><input type="text" value="contact.surname" v-model="contact.surname"/></span>
+        <span class="value"><input type="text"  v-model="contact.surname"/></span>
       </li>
       <li class="contact-item">
         <span class="label">Hasło:</span>
-        <span class="value"><input type="text" value="contact.password" v-model="contact.password"/></span>
+        <span class="value"><input type="text" v-model="contact.password"/></span>
       </li>
       <li class="contact-item">
         <span class="label">Numer telefonu:</span>
-        <span class="value"><input type="text" value="contact.phoneNumber" v-model="contact.phoneNumber"/></span>
+        <span class="value"><input type="text" v-model="contact.phoneNumber"/></span>
       </li>
       <li class="contact-item">
         <span class="label">Kategoria:</span>
@@ -103,8 +84,7 @@ const deleteContact = async () => {
         </span>
       </li>
     </ul>
-    <button @click="editContact" class="edit">Edit</button>
-    <button @click="deleteContact" class="delete">Delete</button>
+    <button class="edit" @click="addContact">Add</button>
   </div>
 </template>
 
