@@ -6,8 +6,14 @@
         <div class="contact">{{ surname }}</div>
         <div class="contact">{{ password }}</div>
         <div class="contact">{{ category }}</div>
-        <div class="contact">{{ subCategory }}</div>
-        <div class="contact">{{ phonenumber }}</div>
+        <div class="contact">
+            <select>
+                <option>służbowy</option>
+                <option>prywatny</option>
+                <option>inny</option>
+            </select>
+        </div>
+        <div class="contact">{{ phoneNumber }}</div>
         <div class="contact"><input type="date"/></div>
         <button>Edit</button>
     </div>
@@ -17,7 +23,7 @@
 
 export default {
   name: 'ContactComponent',
-  props: ['id', 'email', 'name', 'surname', 'password', 'category', 'subCategory', 'phonenumber', 'birthdate'],
+  props: ['id', 'email', 'name', 'surname', 'password', 'category', 'subCategory', 'phoneNumber', 'birthdate'],
   data() {
     return {
         papiez: []

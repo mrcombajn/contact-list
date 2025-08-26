@@ -9,14 +9,14 @@
       :password="contact.password"
       :category="contact.category"
       :subCategory="contact.subCategory"
-      :phonenumber="contact.phonenumber"
+      :phoneNumber="contact.phoneNumber"
       :birthdate="contact.birthdate" />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Contact from './Contact.vue';
+import Contact from '../components/Contact.vue';
 
 export default {
   name: 'ContactList',
@@ -25,11 +25,13 @@ export default {
   },
   data() {
     return {
-      contacts: []
+      contacts: [],
+      predefinedCategories: [],
+      predefinedSubCategories: []
     };
   },
   methods: {
-    async fetchContacts() {
+    async fetchData() {
       try
       {
         var response = await axios.get(`${process.env.VUE_APP_API_URL}/api/contact`)
@@ -42,7 +44,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchContacts()
+    this.fetchData()
   }
 };
 </script>

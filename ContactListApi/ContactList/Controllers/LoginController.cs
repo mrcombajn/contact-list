@@ -34,7 +34,7 @@ public class LoginController : ControllerBase
 
         var result = await _sender.Send(request, cancellationToken);
 
-        return result.IsSuccess ? Ok(new TokenDto { Token = GetJwtSecurityToken(userLoginDto.Login) }) : BadRequest();
+        return result.IsSuccess ? Ok(new TokenDto { Token = new JwtSecurityTokenHandler().WriteToken(GetJwtSecurityToken(userLoginDto.Login)) }) : BadRequest();
     }
 
     private JwtSecurityToken GetJwtSecurityToken(string userName)
