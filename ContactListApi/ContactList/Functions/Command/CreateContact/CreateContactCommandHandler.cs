@@ -17,15 +17,15 @@ public sealed class CreateContactCommandHandler : ICommandHandler<CreateContactC
 
     public async Task<Result> Handle(CreateContactCommand request, CancellationToken cancellationToken)
     {
-        var category = _context.Category.Find(request.Category.Id);
+        var category = await _context.Category.FindAsync(request.Category, cancellationToken);
 
         if (category is null)
             return Result.Failure<ContactDto>(Error.NullValue);
 
-        var subCategory = _context
+        var subCategory = await _context
             .SubCategory
-            .FirstOrDefault(e => e.Id == request.SubCategory.Id || e.Name.Equals(request.SubCategory.Name)) ??
-            _context.SubCategory.Add(new() { Name = request.SubCategory.Name }).Entity;
+            .FindAsync(request.SubCategory) ??
+            _context.SubCategory.Add(new() { Name = request.SubCategory }).Entity;
 
         var contact = new Contact()
         {
@@ -52,8 +52,8 @@ public sealed class CreateContactCommandHandler : ICommandHandler<CreateContactC
                 Name = entry.Name,
                 Surname = entry.Surname,
                 Password = entry.Password,
-                Category = new CategoryDto() { Id = entry.Category.Id, Name = entry.Category.Name },
-                SubCategory = new SubCategoryDto { Id = entry.SubCategory.Id, Name = entry.SubCategory.Name },
+                Category = entry.Category.Name,
+                SubCategory = entry.SubCategory.Name,
                 PhoneNumber = entry.PhoneNumber,
                 BirthdayDate = entry.BirthdayDate,
             });

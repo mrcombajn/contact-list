@@ -13,8 +13,8 @@ const contact = reactive({
   surname: '',
   password: '',
   phoneNumber: '',
-  category: { name: 'służbowy' },
-  subCategory: { name: '' },
+  category: '',
+  subCategory: '',
   birthdate: ''
 })
 
@@ -60,17 +60,17 @@ const addContact = async () => {
       <li class="contact-item">
         <span class="label">Kategoria:</span>
         <span class="value">
-          <select v-model="contact.category.name">
+          <select v-model="contact.category">
             <option>służbowy</option>
             <option>prywatny</option>
             <option>inny</option>
           </select>
         </span>
       </li>
-      <li class="contact-item" v-if="contact.category.name !== 'prywatny'">
+      <li class="contact-item" v-if="contact.category !== 'prywatny'">
         <span class="label">Podkategoria:</span>
         <span class="value">
-          <select v-model="contact.subCategory.name" v-if="contact.category.name !== 'inny'">
+          <select v-model="contact.subCategory" v-if="contact.category !== 'inny'">
             <option>szef</option>
             <option>klient</option>
           </select>

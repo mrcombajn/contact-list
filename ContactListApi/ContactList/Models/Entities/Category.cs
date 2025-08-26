@@ -1,9 +1,11 @@
-﻿namespace ContactList.Models.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ContactList.Models.Entities;
 
 public class Category
 {
-    public int Id { get; set; }
-
+    [Key]
+    [Required]
     public string Name { get; set; }
 
 }

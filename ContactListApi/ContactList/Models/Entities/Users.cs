@@ -4,11 +4,9 @@ namespace ContactList.Models.Entities;
 
 public class Users
 {
-    [Key]
-    public int Id { get; set; }
 
-    [Required]
-    public string Username;
+    [Key]
+    public string Username { get; set; }
 
     [Required]
     public string Password { get; set; }

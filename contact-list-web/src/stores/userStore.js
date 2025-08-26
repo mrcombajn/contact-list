@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 /* eslint-disable */
 export const useUserStore = defineStore('user', {
     state: () => ({
-        token: localStorage.getItem('token') || null,
+        token: null,
     }),
     getters: {
         isAuthenticated: (state) => !!state.token
@@ -19,16 +19,11 @@ export const useUserStore = defineStore('user', {
 
                 if(response.data.token){
                     this.token = response.data.token
-                    localStorage.setItem('token', response.data.token)
                 }
             }
             catch(error){
                 console.log(error)
             }
         },
-        logout() {
-            this.token = null
-            localStorage.removeItem('token')
-        }
     }
 })
