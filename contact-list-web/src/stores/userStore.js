@@ -21,7 +21,6 @@ export const useUserStore = defineStore('user', {
                     this.token = response.data.token
                     localStorage.setItem('token', response.data.token)
                 }
-                console.log(this.token)
             }
             catch(error){
                 console.log(error)

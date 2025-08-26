@@ -4,15 +4,15 @@ import { createPinia } from 'pinia'
 import { useUserStore } from './stores/userStore'
 import App from './App.vue'
 import LoginForm from './views/LoginForm.vue'
-import Contact from './components/Contact.vue';
+import ContactItem from './components/ContactItem.vue';
 import ContactList from './views/ContactList.vue'
 
 const routes = [
     { path: '/', name: 'Home', component: LoginForm },
     { path: '/login', name: 'Login', component: LoginForm },
     { path: '/contactlist', name: 'ContactList', component: ContactList },
-    { path: '/contact/:id', name: 'Contact', component: Contact, meta: { requiresAuth: true }},
-    { path: '/contact/add', name: 'Add Contact', component: Contact, meta: { requiresAuth: true }}
+    { path: '/contact/:id', name: 'Contact', component: ContactItem, meta: { requiresAuth: true }},
+    { path: '/contact/add', name: 'AddContact', component: ContactItem, meta: { requiresAuth: true }}
 ];
 
 const router = createRouter({

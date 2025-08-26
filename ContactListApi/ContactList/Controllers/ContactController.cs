@@ -35,7 +35,8 @@ public class ContactController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("/{id}")]
+    [HttpGet("/api/contact/{id}")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ContactDto>> GetContact(int id)
