@@ -9,9 +9,8 @@ import ContactList from './views/ContactList.vue'
 import AddContactItem from './components/AddContactItem.vue'
 
 const routes = [
-    { path: '/', name: 'Home', component: LoginForm },
+    { path: '/', name: 'ContactList', component: ContactList },
     { path: '/login', name: 'Login', component: LoginForm },
-    { path: '/contactlist', name: 'ContactList', component: ContactList },
     { path: '/contact/:id', name: 'Contact', component: ContactItem, meta: { requiresAuth: true }},
     { path: '/contact/add', name: 'AddContact', component: AddContactItem, meta: { requiresAuth: true }}
 ];

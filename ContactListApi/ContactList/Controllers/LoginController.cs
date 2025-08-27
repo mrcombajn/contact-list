@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using ContactList.Functions.Query.GetUser;
 using ContactList.Models.Dto;
@@ -34,17 +35,27 @@ public class LoginController : ControllerBase
 
         var result = await _sender.Send(request, cancellationToken);
 
-        return result.IsSuccess ? Ok(new TokenDto { Token = new JwtSecurityTokenHandler().WriteToken(GetJwtSecurityToken(userLoginDto.Login)) }) : BadRequest();
+        return result.IsSuccess ? Ok(new TokenDto { Token = GetJwtSecurityToken(userLoginDto.Login) }) : BadRequest();
     }
 
-    private JwtSecurityToken GetJwtSecurityToken(string userName)
+    private string GetJwtSecurityToken(string username)
     {
         var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")));
+        var creds = new SigningCredentials(issuerSigningKey, SecurityAlgorithms.HmacSha256);
 
-        return new JwtSecurityToken(
-            expires: DateTime.Now.Add(TimeSpan.FromMinutes(60)),
-            signingCredentials: new SigningCredentials(issuerSigningKey, algorithm: SecurityAlgorithms.HmacSha256)
-            );
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, username)
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: "MyApp",
+            audience: "MyAppClient",
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(60),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
 }

@@ -8,7 +8,7 @@
 
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 
@@ -27,4 +27,12 @@ const tryLogin = async () => {
     router.push({ name: 'ContactList' })
   }
 }
+
+const checkIfAuthenticated = () => {
+    if(userStore.isAuthenticated){
+        router.push({ name: 'ContactList' })
+    }
+}
+
+onMounted(checkIfAuthenticated)
 </script>

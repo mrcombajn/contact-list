@@ -26,7 +26,6 @@ const contacts = ref([])
 const fetchData = async () => {
   try {
     const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/contact`)
-    console.log(userStore.token)
     contacts.value = response.data
   } catch (error) {
     console.error(error)

@@ -12,6 +12,7 @@ const contact = ref(null)
 
 onMounted(async () => {
   try {
+    console.log(userStore.token)
     const response = await axios.get(
       `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`,
       { headers: { Authorization: `Bearer ${userStore.token}` } }

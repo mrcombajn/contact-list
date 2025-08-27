@@ -3,6 +3,7 @@ using ContactList.Abstractions.Messaging;
 using ContactList.Abstractions.Shared;
 using ContactList.Models;
 using ContactList.Models.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Functions.Command.UpdateContact;
 
@@ -22,14 +23,14 @@ public sealed class UpdateContactCommandHandler : ICommandHandler<UpdateContactC
         if (contact == null)
             return Result.Failure(Error.NullValue);
 
-        var category = await _context.Category.FindAsync(request.Category, cancellationToken);
+        var category = await _context.Category.FirstOrDefaultAsync(u => u.Name == request.Category);
 
         if (category is null)
             return Result.Failure<ContactDto>(Error.NullValue);
 
         var subCategory = await _context
             .SubCategory
-            .FindAsync(request.SubCategory) ??
+            .FirstOrDefaultAsync(u => u.Name == request.Category) ??
             _context.SubCategory.Add(new() { Name = request.SubCategory }).Entity;
 
         contact.Email = request.Email;
