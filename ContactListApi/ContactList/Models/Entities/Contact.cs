@@ -10,6 +10,7 @@ public class Contact
 
     [Required]
     [MaxLength(50)]
+    [EmailAddress]
     public string Email { get; set; }
 
     [Required]
@@ -31,6 +32,7 @@ public class Contact
     public SubCategory SubCategory { get; set; }
 
     [MaxLength(20)]
+    [Phone]
     public string PhoneNumber { get; set; }
 
     public DateOnly BirthdayDate { get; set; }

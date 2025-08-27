@@ -29,8 +29,8 @@ public sealed class GetContactQueryHandler : IRequestHandler<GetContactQuery, Co
             Name = contact.Name,
             Surname = contact.Surname,
             Email = contact.Email,
-            Category = new CategoryDto { Id = contact.Category.Id, Name = contact.Category.Name },
-            SubCategory = new SubCategoryDto() { Id = contact.SubCategory.Id, Name = contact.SubCategory.Name },
+            Category = contact.Category.Name,
+            SubCategory = contact.SubCategory.Name,
             PhoneNumber = contact.PhoneNumber,
             BirthdayDate = contact.BirthdayDate,
         };

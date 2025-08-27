@@ -2,6 +2,8 @@
 using ContactList.Abstractions.Messaging;
 using ContactList.Abstractions.Shared;
 using ContactList.Models;
+using ContactList.Models.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Functions.Command.UpdateContact;
 
@@ -21,12 +23,22 @@ public sealed class UpdateContactCommandHandler : ICommandHandler<UpdateContactC
         if (contact == null)
             return Result.Failure(Error.NullValue);
 
+        var category = await _context.Category.FirstOrDefaultAsync(u => u.Name == request.Category);
+
+        if (category is null)
+            return Result.Failure<ContactDto>(Error.NullValue);
+
+        var subCategory = await _context
+            .SubCategory
+            .FirstOrDefaultAsync(u => u.Name == request.Category) ??
+            _context.SubCategory.Add(new() { Name = request.SubCategory }).Entity;
+
         contact.Email = request.Email;
         contact.Name = request.Name;
         contact.Surname = request.Surname;
         contact.Password = request.Password;
-        contact.Category = _context.Category.Find(request.Category);
-        contact.SubCategory = _context.SubCategory.Find(request.SubCategory);
+        contact.Category = category;
+        contact.SubCategory = subCategory;
         contact.PhoneNumber = request.PhoneNumber;
         contact.BirthdayDate = request.BirthdayDate;
 

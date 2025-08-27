@@ -15,11 +15,10 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Result>
 
     public async Task<Result> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var users = await _context.Users.ToListAsync();
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Username == request.Login);
 
-        var user = users.Where(u => u.Username.Equals(request.Login) && u.Password.Equals(request.Password));
-
-        if (user == null)
+        if (user == null || !user.Password.Equals(request.Password))
             return Result.Failure(Error.NullValue);
 
         return Result.Success();

@@ -1,4 +1,36 @@
 import { createApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { createPinia } from 'pinia'
+import { useUserStore } from './stores/userStore'
 import App from './App.vue'
+import LoginForm from './views/LoginForm.vue'
+import ContactItem from './components/ContactItem.vue';
+import ContactList from './views/ContactList.vue'
+import AddContactItem from './components/AddContactItem.vue'
 
-createApp(App).mount('#app')
+const routes = [
+    { path: '/', name: 'ContactList', component: ContactList },
+    { path: '/login', name: 'Login', component: LoginForm },
+    { path: '/contact/:id', name: 'Contact', component: ContactItem, meta: { requiresAuth: true }},
+    { path: '/contact/add', name: 'AddContact', component: AddContactItem, meta: { requiresAuth: true }}
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+
+  if (to.meta.requiresAuth && !userStore.token) {
+    next('/login')
+  } else {
+    next()
+  }
+})
+
+const app = createApp(App)
+app.use(createPinia())
+app.use(router)
+app.mount('#app')

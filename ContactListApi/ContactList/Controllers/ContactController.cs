@@ -27,7 +27,7 @@ public class ContactController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ContactDto>>> Get()
+    public async Task<ActionResult<List<DummyContactDto>>> Get()
     {
         var request = new GetAllContactQuery();
         var result = await _sender.Send(request);
@@ -35,28 +35,28 @@ public class ContactController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("/api/contact/{id}")]
+    //[Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Contact>> GetContact(int id)
+    public async Task<ActionResult<ContactDto>> GetContact(int id)
     {
         var request = new GetContactQuery() { Id = id };
 
         try
         {
-            /*            var result =  await _mediator.Send(request);
-                        if(result is null)
-                        {
-                            return NotFound();
-                        }
+            var result = await _sender.Send(request);
+            if (result is null)
+            {
+                return NotFound();
+            }
 
-                        return Ok(result);*/
+            return Ok(result);
         }
         catch
         {
             return new NotFoundObjectResult("Contact with given id not found!");
         }
-        return null;
     }
 
 
@@ -66,6 +66,7 @@ public class ContactController : ControllerBase
 
     [HttpPost]
     [Consumes("application/json")]
+    //[Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -89,8 +90,8 @@ public class ContactController : ControllerBase
     }
 
     // PUT api/values/5
-    [HttpPut("{index}")]
-    [Authorize]
+    [HttpPut("{id}")]
+    //[Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -104,8 +105,8 @@ public class ContactController : ControllerBase
             Name = contact.Name,
             Surname = contact.Surname,
             Password = contact.Password,
-            Category = contact.Category,
-            SubCategory = contact.SubCategory,
+            //Category = contact.Category,
+            //SubCategory = contact.SubCategory,
             PhoneNumber = contact.PhoneNumber,
             BirthdayDate = contact.BirthdayDate,
         };
@@ -116,16 +117,16 @@ public class ContactController : ControllerBase
     }
 
     // DELETE api/values/5
-    [HttpDelete("{index}")]
-    [Authorize]
+    [HttpDelete("{id}")]
+    //[Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Delete(int index, CancellationToken cancellationToken)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteContactCommand
         {
-            Id = index,
+            Id = id,
         };
 
         var result = await _sender.Send(command, cancellationToken);

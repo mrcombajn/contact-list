@@ -1,18 +1,11 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-  <ContactList/>
+  <RouterView />
 </template>
 
 <script>
-import ContactList from './components/ContactList.vue';
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld,
-    ContactList
-  }
 }
 </script>
 
