@@ -53,7 +53,7 @@ Aplikacja webowa do zarządzania kontaktami. Użytkownicy mogą przeglądać lis
 1. Skonfiguruj plik `.env` w frontendzie z adresem backendu (`VUE_APP_API_URL`).
 2. Uruchom backend:
    W folderze ContactListApi
-   
+
    ```bash
    docker compose --env-file .env up -d --force-recreate --build --no-deps
    ```
@@ -68,5 +68,5 @@ Aplikacja webowa do zarządzania kontaktami. Użytkownicy mogą przeglądać lis
 ## Token JWT
 
 WIP - feature nie został do końca zaimplementowany
-* Token generowany podczas logowania (`POST /api/login`)
+* Token generowany podczas logowania (`POST /api/login`) (w razie gdyby przekierowało użytkowanika na ten adres wystarczy wpisać admin admin ;))
 * Wysyłany w nagłówku `Authorization: Bearer <token>` przy żądaniach do tras chronionych
