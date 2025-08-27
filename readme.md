@@ -1,28 +1,72 @@
-Funkcjonalności:  
-1. Logowanie:  
-Funkcjonalność z pkt. 2 dostępna jest dla niezalogowanego użytkownika, pozostałe wymagają zalogowania.  
-2. Przeglądanie listy kontaktów:  
-Lista powinna zawierać dane podstawowe. Po wybraniu konkretnego kontaktu wyświetlane są jego 
-szczegóły.  
-3. Szczegóły kontaktu:  
-Zalogowany użytkownik może edytować i usuwać istniejące wpisy oraz dodawać nowe. Pojedynczy kontakt 
-powinien mieć przynajmniej:  
-• imię,  
-• nazwisko,  
-• email – unikalny,  
-• hasło – powinno spełniać podstawowe standardy złożoności hasła,  
-• kategoria (służbowy, prywatny, inny),  
-• w przypadku wybrania opcji „służbowy” powinna być możliwość wybrania podkategorii ze słownika (np. 
-szef, klient, itp.), a w przypadku opcji „inny” możliwość wpisania dowolnej podkategorii,  
-• telefon, 
-• data urodzenia.   
-Założenia techniczne:  
-• Aplikacja powinna być napisana w języku C# z użyciem dowolnej bazy danych. 
-• Architektura aplikacji backendowej - REST API - wymagane 
-• Architektura aplikacji frontendowej - Single Page Application - wymagane 
-• Wszelkie dane słownikowe (kategorie, podkategorie) powinny być trzymane w bazie danych - 
-wymagane 
-• Zaleca się wykorzystanie darmowych bibliotek 
-• Należy zwrócić uwagę na bezpieczeństwo aplikacji 
-• Kod źródłowy powinien zawierać komentarze 
-• Wygląd graficzny aplikacji jest nieistotny 
+# Contact List Web Application
+
+## Opis projektu
+
+Aplikacja webowa do zarządzania kontaktami. Użytkownicy mogą przeglądać listę kontaktów, dodawać nowe oraz edytować istniejące. Projekt posiada mechanizm logowania i autoryzacji z użyciem tokenów JWT.
+
+## Technologie
+
+* **Backend:** .NET 9 (ASP.NET Core Web API)
+* **ORM / Baza danych:** Entity Framework Core
+* **Frontend:** Vue.js 3 + Composition API
+* **Routing:** Vue Router
+* **HTTP Client:** Axios
+* **Autoryzacja:** JWT (JSON Web Token)
+* **Konteneryzacja:** Docker
+
+## Podstrony i routing
+
+| Ścieżka        | Nazwa         | Komponent        | Opis                                                                                     |
+| -------------- | ------------- | ---------------- | ---------------------------------------------------------------------------------------- |
+| `/`            | `ContactList` | `ContactList`    | Strona główna wyświetlająca listę kontaktów.                                             |
+| `/login`       | `Login`       | `LoginForm`      | Formularz logowania użytkownika.                                                         |
+| `/contact/:id` | `Contact`     | `ContactItem`    | Widok szczegółów kontaktu. Parametr `:id` określa konkretny kontakt. Wymaga autoryzacji. |
+| `/contact/add` | `AddContact`  | `AddContactItem` | Formularz dodawania nowego kontaktu. Wymaga autoryzacji.                                 |
+
+## Funkcjonalności
+
+* **Autoryzacja użytkowników**
+
+  * Logowanie za pomocą nazwy użytkownika i hasła
+  * Generowanie tokenów JWT
+  * Ochrona tras wymagających zalogowania
+
+* **Zarządzanie kontaktami**
+
+  * Wyświetlanie listy kontaktów
+  * Dodawanie nowych kontaktów
+  * Edycja istniejących kontaktów
+  * Dynamiczne formularze (wybór kategorii i podkategorii)
+
+* **Interakcja frontend-backend**
+
+  * Pobieranie i wysyłanie danych z użyciem Axios
+  * Walidacja danych po stronie backendu (Data Annotations EF)
+
+* **Infrastruktura**
+
+  * Możliwość uruchomienia aplikacji w kontenerach Docker
+  * Oddzielenie backendu od frontendowego SPA
+
+## Uruchamianie projektu
+
+1. Skonfiguruj plik `.env` w frontendzie z adresem backendu (`VUE_APP_API_URL`).
+2. Uruchom backend:
+   W folderze ContactListApi
+   
+   ```bash
+   docker compose --env-file .env up -d --force-recreate --build --no-deps
+   ```
+3. Uruchom frontend:
+   W folderze contact-list-web
+
+   ```bash
+   npm install
+   npm run serve
+   ```
+
+## Token JWT
+
+WIP - feature nie został do końca zaimplementowany
+* Token generowany podczas logowania (`POST /api/login`)
+* Wysyłany w nagłówku `Authorization: Bearer <token>` przy żądaniach do tras chronionych
