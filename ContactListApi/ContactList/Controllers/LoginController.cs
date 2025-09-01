@@ -40,20 +40,25 @@ public class LoginController : ControllerBase
 
     private string GetJwtSecurityToken(string username)
     {
-        var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")));
+        var issuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET").Trim())
+        );
         var creds = new SigningCredentials(issuerSigningKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, username)
+            new Claim(JwtRegisteredClaimNames.Sub, username),
+            new Claim("role", "User")
         };
 
         var token = new JwtSecurityToken(
-            issuer: "MyApp",
-            audience: "MyAppClient",
+            issuer: "contactlist",
+            audience: "my-api",
             claims: claims,
+            notBefore: DateTime.UtcNow,
             expires: DateTime.UtcNow.AddMinutes(60),
-            signingCredentials: creds);
+            signingCredentials: creds
+        );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

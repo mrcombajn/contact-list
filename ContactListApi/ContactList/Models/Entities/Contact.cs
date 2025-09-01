@@ -35,5 +35,6 @@ public class Contact
     [Phone]
     public string PhoneNumber { get; set; }
 
+    [Required]
     public DateOnly BirthdayDate { get; set; }
 }

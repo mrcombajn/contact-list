@@ -43,3 +43,24 @@ const addContact = () => {
 onMounted(fetchData)
 
 </script>
+
+<style lang="css" scoped>
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #4338ca, #2563eb);
+  transform: translateY(-2px);
+}
+
+button:hover {
+  background: linear-gradient(135deg, #4338ca, #2563eb);
+  transform: translateY(-2px);
+}
+
+</style>
