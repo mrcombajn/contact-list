@@ -66,7 +66,6 @@ Aplikacja webowa do zarządzania kontaktami. Użytkownicy mogą przeglądać lis
 
 ## Token JWT
 
-
 * Token generowany podczas logowania (`POST /api/login`) (w razie gdyby przekierowało użytkowanika na ten adres wystarczy wpisać admin admin ;))
 * Wysyłany w nagłówku `Authorization: Bearer <token>` przy żądaniach do tras chronionych
 
