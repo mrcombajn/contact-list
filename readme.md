@@ -66,6 +66,19 @@ Aplikacja webowa do zarządzania kontaktami. Użytkownicy mogą przeglądać lis
 
 ## Token JWT
 
-WIP - feature nie został do końca zaimplementowany
+
 * Token generowany podczas logowania (`POST /api/login`) (w razie gdyby przekierowało użytkowanika na ten adres wystarczy wpisać admin admin ;))
 * Wysyłany w nagłówku `Authorization: Bearer <token>` przy żądaniach do tras chronionych
+
+
+## Modele danych
+
+    Id - autogenerowany przez baze
+    Email - wymagany, unikalny, format maila, xyz@xyz.com, maksymalna długość 50 znaków
+    Name - wymnagany, maksymalna długość 20 znaków
+	Surname - wymagany, maksymalna długość 20 znaków
+	Password - maksymalna długość 20 znaków
+    Category - przy próbie wpisania nieistniejącej kategorii zwraca BadRequest
+	SubCategory - przy dodaniu kategorii "Inny" dodaje kategorie wpisaną przez użyutkowanika
+    PhoneNumber - maksymalna długość 20 znaków, walidacja telefonu
+	BirthdayDate - data urodzin w formacie yyyy-mm-dd
