@@ -66,7 +66,7 @@ public class ContactController : ControllerBase
 
     [HttpPost]
     [Consumes("application/json")]
-    //[Authorize]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -91,7 +91,7 @@ public class ContactController : ControllerBase
 
     // PUT api/values/5
     [HttpPut("{id}")]
-    //[Authorize]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -105,8 +105,8 @@ public class ContactController : ControllerBase
             Name = contact.Name,
             Surname = contact.Surname,
             Password = contact.Password,
-            //Category = contact.Category,
-            //SubCategory = contact.SubCategory,
+            Category = contact.Category,
+            SubCategory = contact.SubCategory,
             PhoneNumber = contact.PhoneNumber,
             BirthdayDate = contact.BirthdayDate,
         };
@@ -118,7 +118,7 @@ public class ContactController : ControllerBase
 
     // DELETE api/values/5
     [HttpDelete("{id}")]
-    //[Authorize]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

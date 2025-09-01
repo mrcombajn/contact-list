@@ -12,11 +12,9 @@ const contact = ref(null)
 
 onMounted(async () => {
   try {
-    console.log(userStore.token)
     const response = await axios.get(
-      `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`,
-      { headers: { Authorization: `Bearer ${userStore.token}` } }
-    )
+      `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`)
+
     contact.value = response.data
   } catch (err) {
     console.error(err)
@@ -25,12 +23,16 @@ onMounted(async () => {
 
 const editContact = async () => {
   try {
+    var rawData = Object.assign({}, contact.value)
+
     const response = await axios.put(
       `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`,
-      contact.value,
+      rawData,
       { headers: { Authorization: `Bearer ${userStore.token}` }}
     )
     contact.value = response.data
+
+    router.push({name: "ContactList" })
   } catch (err) {
     console.error(err)
   }
@@ -40,7 +42,6 @@ const deleteContact = async () => {
   try  {
     await axios.delete(
       `${process.env.VUE_APP_API_URL}/api/contact/${route.params.id}`,
-      contact.value,
       { headers: { Authorization: `Bearer ${userStore.token}` }}
     )
 
@@ -50,10 +51,15 @@ const deleteContact = async () => {
   }
 }
 
+const backToMainPage = () => {
+  router.push({ name: 'ContactList' })
+}
+
 </script>
 
 <template>
   <div id="contact-container" v-if="contact">
+    <button @click="backToMainPage">Powrót do strony głównej</button>
     <ul class="contact-list">
       <li class="contact-item">
         <span class="label">Email:</span>
@@ -69,7 +75,7 @@ const deleteContact = async () => {
       </li>
       <li class="contact-item">
         <span class="label">Hasło:</span>
-        <span class="value"><input type="text" value="contact.password" v-model="contact.password"/></span>
+        <span class="value"><input type="password" value="contact.password" v-model="contact.password"/></span>
       </li>
       <li class="contact-item">
         <span class="label">Numer telefonu:</span>
@@ -98,7 +104,7 @@ const deleteContact = async () => {
       <li class="contact-item">
         <span class="label">Data urodzin:</span>
         <span class="value">
-          <input type="date" v-model="contact.birdthdayDate">
+          <input type="date" v-model.lazy="contact.birthdayDate">
         </span>
       </li>
     </ul>

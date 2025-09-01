@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-var key = Encoding.ASCII.GetBytes("key_placeholder");
+var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET").Trim());
 
 builder.Services.AddDbContext<ContactContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddScoped<ContactContext>();
@@ -30,15 +30,19 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = true;
     options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.IncludeErrorDetails = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
+        ValidIssuer = "contactlist",
         ValidateAudience = true,
+        ValidAudience = "my-api",
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
     };
 });
 
@@ -53,6 +57,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

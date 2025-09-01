@@ -15,7 +15,7 @@ const contact = reactive({
   phoneNumber: '',
   category: '',
   subCategory: '',
-  birthdate: ''
+  birthdayDate: ''
 })
 
 const addContact = async () => {
@@ -32,10 +32,16 @@ const addContact = async () => {
     }
 }
 
+const backToMainPage = () => {
+  router.push({ name: 'ContactList' })
+}
+
 </script>
 
 <template>
   <div id="contact-container">
+    <button @click="backToMainPage">Powrót do strony głównej</button>
+
     <ul class="contact-list">
       <li class="contact-item">
         <span class="label">Email:</span>
@@ -51,7 +57,7 @@ const addContact = async () => {
       </li>
       <li class="contact-item">
         <span class="label">Hasło:</span>
-        <span class="value"><input type="text" v-model="contact.password"/></span>
+        <span class="value"><input type="password" v-model="contact.password"/></span>
       </li>
       <li class="contact-item">
         <span class="label">Numer telefonu:</span>
@@ -80,7 +86,7 @@ const addContact = async () => {
       <li class="contact-item">
         <span class="label">Data urodzin:</span>
         <span class="value">
-          <input type="date" v-model="contact.birdthdayDate">
+          <input type="date" v-model="contact.birthdayDate">
         </span>
       </li>
     </ul>

@@ -1,5 +1,4 @@
-﻿
-using ContactList.Abstractions.Messaging;
+﻿using ContactList.Abstractions.Messaging;
 using ContactList.Abstractions.Shared;
 using ContactList.Models;
 using ContactList.Models.Dto;
